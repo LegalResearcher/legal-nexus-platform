@@ -9,9 +9,11 @@ import PasswordModal from '@/components/PasswordModal';
 import FloatingButtons from '@/components/FloatingButtons';
 import Footer from '@/components/Footer';
 import { toast } from 'sonner';
+import { useVisitTracker } from '@/hooks/useVisitTracker';
 
 const APP_VERSION = '3.1.0';
 const RELEASE_DATE = '1 يناير 2026';
+const PAGE_NAME = 'الرئيسية';
 
 interface NavItem {
   id: string;
@@ -29,7 +31,9 @@ const Index: React.FC = () => {
   const [showUpdateModal, setShowUpdateModal] = useState(true);
   const [showLegalModal, setShowLegalModal] = useState(false);
   const [showPasswordModal, setShowPasswordModal] = useState(false);
-  const [downloadCount, setDownloadCount] = useState(15420);
+
+  // Track visits and get real count from database
+  const { visitCount, isLoading: isLoadingVisits } = useVisitTracker(PAGE_NAME);
 
   // Initialize dark mode from localStorage
   useEffect(() => {
@@ -136,7 +140,7 @@ const Index: React.FC = () => {
           © 2025 الناصر تِك للحلول الرقمية (Alnasser Tech Digital Solutions). جميع الحقوق محفوظة.
         </div>
 
-        <Footer downloadCount={downloadCount} version={APP_VERSION} />
+        <Footer downloadCount={visitCount} isLoading={isLoadingVisits} version={APP_VERSION} />
       </div>
 
       {/* Floating Buttons */}

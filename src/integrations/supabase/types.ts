@@ -14,13 +14,36 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      page_visits: {
+        Row: {
+          created_at: string
+          id: string
+          page_name: string
+          updated_at: string
+          visits_count: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          page_name: string
+          updated_at?: string
+          visits_count?: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          page_name?: string
+          updated_at?: string
+          visits_count?: number
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      increment_visit_count: { Args: { page_key: string }; Returns: undefined }
     }
     Enums: {
       [_ in never]: never

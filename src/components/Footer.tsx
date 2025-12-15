@@ -1,13 +1,14 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { Download, FileText, Globe, Eye } from 'lucide-react';
+import { Download, FileText, Globe, Eye, Loader2 } from 'lucide-react';
 
 interface FooterProps {
   downloadCount: number;
+  isLoading?: boolean;
   version: string;
 }
 
-const Footer: React.FC<FooterProps> = ({ downloadCount, version }) => {
+const Footer: React.FC<FooterProps> = ({ downloadCount, isLoading = false, version }) => {
   return (
     <footer className="mt-8 pt-6 border-t border-border">
       {/* Download Button */}
@@ -50,10 +51,15 @@ const Footer: React.FC<FooterProps> = ({ downloadCount, version }) => {
         </a>
       </div>
 
-      {/* Download Count */}
+      {/* Visit Count */}
       <div className="text-center text-muted-foreground mb-4">
         <Eye className="inline h-4 w-4 ml-2" />
-        عدد التحميلات: <strong className="text-foreground">{downloadCount.toLocaleString('ar-EG')}</strong>
+        عدد الزيارات:{' '}
+        {isLoading ? (
+          <Loader2 className="inline h-4 w-4 animate-spin" />
+        ) : (
+          <strong className="text-foreground">{downloadCount.toLocaleString('ar-EG')}</strong>
+        )}
       </div>
 
       {/* Copyright */}
