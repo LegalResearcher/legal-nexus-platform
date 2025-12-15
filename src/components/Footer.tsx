@@ -1,28 +1,39 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { Download, FileText, Globe, Eye, Loader2 } from 'lucide-react';
+import { Download, FileText, Globe, Eye, Loader2, DownloadCloud } from 'lucide-react';
 
 interface FooterProps {
+  visitCount: number;
   downloadCount: number;
   isLoading?: boolean;
   version: string;
+  onDownloadClick: () => void;
 }
 
-const Footer: React.FC<FooterProps> = ({ downloadCount, isLoading = false, version }) => {
+const Footer: React.FC<FooterProps> = ({ 
+  visitCount, 
+  downloadCount, 
+  isLoading = false, 
+  version,
+  onDownloadClick 
+}) => {
+  const handleDownloadClick = () => {
+    onDownloadClick();
+    window.open('https://www.upload-apk.com/UO1EHqgUTAZ0gdr', '_blank', 'noopener,noreferrer');
+  };
+
   return (
     <footer className="mt-8 pt-6 border-t border-border">
       {/* Download Button */}
-      <a 
-        href="https://www.upload-apk.com/UO1EHqgUTAZ0gdr" 
-        target="_blank" 
-        rel="noopener noreferrer"
-        className="block mb-4"
+      <Button 
+        variant="navSuccess" 
+        size="lg" 
+        className="w-full mb-4"
+        onClick={handleDownloadClick}
       >
-        <Button variant="navSuccess" size="lg" className="w-full">
-          <Download className="h-5 w-5" />
-          اضغط هنا لتحميل التطبيق
-        </Button>
-      </a>
+        <Download className="h-5 w-5" />
+        اضغط هنا لتحميل التطبيق
+      </Button>
 
       {/* Policy Link */}
       <a href="#" className="block mb-4">
@@ -51,15 +62,29 @@ const Footer: React.FC<FooterProps> = ({ downloadCount, isLoading = false, versi
         </a>
       </div>
 
-      {/* Visit Count */}
-      <div className="text-center text-muted-foreground mb-4">
-        <Eye className="inline h-4 w-4 ml-2" />
-        عدد الزيارات:{' '}
-        {isLoading ? (
-          <Loader2 className="inline h-4 w-4 animate-spin" />
-        ) : (
-          <strong className="text-foreground">{downloadCount.toLocaleString('ar-EG')}</strong>
-        )}
+      {/* Statistics */}
+      <div className="flex flex-col sm:flex-row justify-center gap-4 sm:gap-8 mb-4 bg-muted/50 py-4 px-6 rounded-xl">
+        {/* Visit Count */}
+        <div className="flex items-center justify-center gap-2 text-muted-foreground">
+          <Eye className="h-5 w-5 text-navy dark:text-accent" />
+          <span>عدد الزيارات:</span>
+          {isLoading ? (
+            <Loader2 className="h-4 w-4 animate-spin" />
+          ) : (
+            <strong className="text-foreground text-lg">{visitCount.toLocaleString('ar-EG')}</strong>
+          )}
+        </div>
+
+        {/* Download Count */}
+        <div className="flex items-center justify-center gap-2 text-muted-foreground">
+          <DownloadCloud className="h-5 w-5 text-success" />
+          <span>عدد التحميلات:</span>
+          {isLoading ? (
+            <Loader2 className="h-4 w-4 animate-spin" />
+          ) : (
+            <strong className="text-foreground text-lg">{downloadCount.toLocaleString('ar-EG')}</strong>
+          )}
+        </div>
       </div>
 
       {/* Copyright */}

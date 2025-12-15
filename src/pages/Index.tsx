@@ -9,11 +9,12 @@ import PasswordModal from '@/components/PasswordModal';
 import FloatingButtons from '@/components/FloatingButtons';
 import Footer from '@/components/Footer';
 import { toast } from 'sonner';
-import { useVisitTracker } from '@/hooks/useVisitTracker';
+import { useStats } from '@/hooks/useStats';
 
 const APP_VERSION = '3.1.0';
 const RELEASE_DATE = '1 يناير 2026';
 const PAGE_NAME = 'الرئيسية';
+const DOWNLOAD_KEY = 'التحميلات';
 
 interface NavItem {
   id: string;
@@ -32,8 +33,8 @@ const Index: React.FC = () => {
   const [showLegalModal, setShowLegalModal] = useState(false);
   const [showPasswordModal, setShowPasswordModal] = useState(false);
 
-  // Track visits and get real count from database
-  const { visitCount, isLoading: isLoadingVisits } = useVisitTracker(PAGE_NAME);
+  // Track visits and downloads from database
+  const { visitCount, downloadCount, isLoading, trackDownload } = useStats(PAGE_NAME, DOWNLOAD_KEY);
 
   // Initialize dark mode from localStorage
   useEffect(() => {
@@ -69,6 +70,11 @@ const Index: React.FC = () => {
   const handlePasswordSuccess = () => {
     toast.success('تم الدخول إلى بنك الاختبارات بنجاح!');
     // In a real app, this would navigate to the exam bank page
+  };
+
+  const handleDownloadClick = async () => {
+    await trackDownload();
+    toast.success('شكراً لتحميل التطبيق! 📥');
   };
 
   const navItems: NavItem[] = [
@@ -140,7 +146,13 @@ const Index: React.FC = () => {
           © 2025 الناصر تِك للحلول الرقمية (Alnasser Tech Digital Solutions). جميع الحقوق محفوظة.
         </div>
 
-        <Footer downloadCount={visitCount} isLoading={isLoadingVisits} version={APP_VERSION} />
+        <Footer 
+          visitCount={visitCount} 
+          downloadCount={downloadCount}
+          isLoading={isLoading} 
+          version={APP_VERSION}
+          onDownloadClick={handleDownloadClick}
+        />
       </div>
 
       {/* Floating Buttons */}
