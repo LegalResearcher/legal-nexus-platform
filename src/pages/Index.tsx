@@ -1,16 +1,15 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Header from '@/components/Header';
 import SearchInput from '@/components/SearchInput';
 import NavButton from '@/components/NavButton';
 import NoticeCard from '@/components/NoticeCard';
 import UpdateModal from '@/components/UpdateModal';
 import LegalConsultantModal from '@/components/LegalConsultantModal';
-import PasswordModal from '@/components/PasswordModal';
 import FloatingButtons from '@/components/FloatingButtons';
 import Footer from '@/components/Footer';
 import { toast } from 'sonner';
 import { useStats } from '@/hooks/useStats';
-
 const APP_VERSION = '3.1.0';
 const RELEASE_DATE = '1 يناير 2026';
 const PAGE_NAME = 'الرئيسية';
@@ -27,12 +26,11 @@ interface NavItem {
 }
 
 const Index: React.FC = () => {
+  const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [showUpdateModal, setShowUpdateModal] = useState(true);
   const [showLegalModal, setShowLegalModal] = useState(false);
-  const [showPasswordModal, setShowPasswordModal] = useState(false);
-
   // Track visits and downloads from database
   const { visitCount, downloadCount, isLoading, trackDownload } = useStats(PAGE_NAME, DOWNLOAD_KEY);
 
@@ -67,11 +65,6 @@ const Index: React.FC = () => {
     sessionStorage.setItem('modalShown', 'true');
   };
 
-  const handlePasswordSuccess = () => {
-    toast.success('تم الدخول إلى بنك الاختبارات بنجاح!');
-    // In a real app, this would navigate to the exam bank page
-  };
-
   const handleDownloadClick = async () => {
     await trackDownload();
     toast.success('شكراً لتحميل التطبيق! 📥');
@@ -90,7 +83,7 @@ const Index: React.FC = () => {
       id: 'exams', 
       icon: '🧠', 
       label: 'بنك اختبارات الشريعة والقانون',
-      onClick: () => setShowPasswordModal(true),
+      onClick: () => navigate('/exam-bank'),
       notice: '📌 تنوية/ يحتوي على أكثر من 350 اختبار محدث لجميع المستويات'
     },
     { 
@@ -171,11 +164,6 @@ const Index: React.FC = () => {
         onClose={() => setShowLegalModal(false)}
       />
 
-      <PasswordModal
-        isOpen={showPasswordModal}
-        onClose={() => setShowPasswordModal(false)}
-        onSuccess={handlePasswordSuccess}
-      />
     </div>
   );
 };
