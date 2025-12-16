@@ -14,6 +14,100 @@ export type Database = {
   }
   public: {
     Tables: {
+      exam_levels: {
+        Row: {
+          created_at: string
+          id: string
+          level_number: number
+          name_ar: string
+          name_en: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          level_number: number
+          name_ar: string
+          name_en: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          level_number?: number
+          name_ar?: string
+          name_en?: string
+        }
+        Relationships: []
+      }
+      exam_questions: {
+        Row: {
+          correct_answer: number
+          created_at: string
+          explanation: string | null
+          id: string
+          options: Json
+          question_text: string
+          subject_id: string
+        }
+        Insert: {
+          correct_answer: number
+          created_at?: string
+          explanation?: string | null
+          id?: string
+          options?: Json
+          question_text: string
+          subject_id: string
+        }
+        Update: {
+          correct_answer?: number
+          created_at?: string
+          explanation?: string | null
+          id?: string
+          options?: Json
+          question_text?: string
+          subject_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "exam_questions_subject_id_fkey"
+            columns: ["subject_id"]
+            isOneToOne: false
+            referencedRelation: "exam_subjects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      exam_subjects: {
+        Row: {
+          created_at: string
+          id: string
+          level_id: string
+          name_ar: string
+          name_en: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          level_id: string
+          name_ar: string
+          name_en: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          level_id?: string
+          name_ar?: string
+          name_en?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "exam_subjects_level_id_fkey"
+            columns: ["level_id"]
+            isOneToOne: false
+            referencedRelation: "exam_levels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       page_visits: {
         Row: {
           created_at: string
