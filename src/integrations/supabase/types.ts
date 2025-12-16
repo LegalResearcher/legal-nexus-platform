@@ -14,6 +14,50 @@ export type Database = {
   }
   public: {
     Tables: {
+      exam_attempts: {
+        Row: {
+          answers: Json
+          created_at: string
+          duration_seconds: number | null
+          id: string
+          passed: boolean
+          score: number
+          student_name: string
+          subject_id: string
+          total_questions: number
+        }
+        Insert: {
+          answers?: Json
+          created_at?: string
+          duration_seconds?: number | null
+          id?: string
+          passed: boolean
+          score: number
+          student_name: string
+          subject_id: string
+          total_questions: number
+        }
+        Update: {
+          answers?: Json
+          created_at?: string
+          duration_seconds?: number | null
+          id?: string
+          passed?: boolean
+          score?: number
+          student_name?: string
+          subject_id?: string
+          total_questions?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "exam_attempts_subject_id_fkey"
+            columns: ["subject_id"]
+            isOneToOne: false
+            referencedRelation: "exam_subjects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       exam_levels: {
         Row: {
           created_at: string
@@ -76,6 +120,53 @@ export type Database = {
           },
         ]
       }
+      exam_settings: {
+        Row: {
+          allow_time_override: boolean
+          created_at: string
+          default_duration_minutes: number
+          id: string
+          passing_score: number
+          password: string | null
+          preparer_name: string | null
+          questions_count: number
+          subject_id: string
+          updated_at: string
+        }
+        Insert: {
+          allow_time_override?: boolean
+          created_at?: string
+          default_duration_minutes?: number
+          id?: string
+          passing_score?: number
+          password?: string | null
+          preparer_name?: string | null
+          questions_count?: number
+          subject_id: string
+          updated_at?: string
+        }
+        Update: {
+          allow_time_override?: boolean
+          created_at?: string
+          default_duration_minutes?: number
+          id?: string
+          passing_score?: number
+          password?: string | null
+          preparer_name?: string | null
+          questions_count?: number
+          subject_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "exam_settings_subject_id_fkey"
+            columns: ["subject_id"]
+            isOneToOne: true
+            referencedRelation: "exam_subjects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       exam_subjects: {
         Row: {
           created_at: string
@@ -132,15 +223,99 @@ export type Database = {
         }
         Relationships: []
       }
+      pending_question_deletions: {
+        Row: {
+          created_at: string
+          id: string
+          question_id: string
+          reason: string | null
+          requested_by: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          question_id: string
+          reason?: string | null
+          requested_by?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          question_id?: string
+          reason?: string | null
+          requested_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pending_question_deletions_question_id_fkey"
+            columns: ["question_id"]
+            isOneToOne: true
+            referencedRelation: "exam_questions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          email: string
+          full_name: string | null
+          id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          full_name?: string | null
+          id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          full_name?: string | null
+          id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
       increment_visit_count: { Args: { page_key: string }; Returns: undefined }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "editor"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -267,6 +442,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "editor"],
+    },
   },
 } as const

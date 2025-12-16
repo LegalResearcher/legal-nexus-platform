@@ -67,8 +67,7 @@ const ExamBank: React.FC = () => {
   };
 
   const handleStartExam = (subject: Subject) => {
-    // For now, show a toast - later will navigate to exam page
-    console.log('Starting exam for:', subject.name_ar);
+    navigate(`/exam/${subject.id}/start`);
   };
 
   return (
