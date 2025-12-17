@@ -88,6 +88,7 @@ export type Database = {
           created_at: string
           explanation: string | null
           id: string
+          model_year: number | null
           options: Json
           question_text: string
           subject_id: string
@@ -97,6 +98,7 @@ export type Database = {
           created_at?: string
           explanation?: string | null
           id?: string
+          model_year?: number | null
           options?: Json
           question_text: string
           subject_id: string
@@ -106,6 +108,7 @@ export type Database = {
           created_at?: string
           explanation?: string | null
           id?: string
+          model_year?: number | null
           options?: Json
           question_text?: string
           subject_id?: string

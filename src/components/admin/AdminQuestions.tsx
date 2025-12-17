@@ -41,7 +41,10 @@ interface Question {
   correct_answer: number;
   explanation: string | null;
   subject_id: string;
+  model_year: number | null;
 }
+
+const MODEL_YEARS = [2020, 2021, 2022, 2023, 2024, 2025, 2026];
 
 interface Subject {
   id: string;
@@ -60,6 +63,7 @@ const AdminQuestions: React.FC<Props> = ({ userRole }) => {
   const [questions, setQuestions] = useState<Question[]>([]);
   const [selectedLevel, setSelectedLevel] = useState<string>('');
   const [selectedSubject, setSelectedSubject] = useState<string>('');
+  const [selectedYear, setSelectedYear] = useState<string>('');
   const [searchQuery, setSearchQuery] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -70,6 +74,7 @@ const AdminQuestions: React.FC<Props> = ({ userRole }) => {
   const [options, setOptions] = useState(['', '', '', '']);
   const [correctAnswer, setCorrectAnswer] = useState(0);
   const [explanation, setExplanation] = useState('');
+  const [questionYear, setQuestionYear] = useState<number>(2024);
 
   useEffect(() => {
     fetchLevels();
@@ -131,6 +136,7 @@ const AdminQuestions: React.FC<Props> = ({ userRole }) => {
     setOptions(['', '', '', '']);
     setCorrectAnswer(0);
     setExplanation('');
+    setQuestionYear(2024);
     setEditingQuestion(null);
   };
 
@@ -140,6 +146,7 @@ const AdminQuestions: React.FC<Props> = ({ userRole }) => {
     setOptions([...question.options]);
     setCorrectAnswer(question.correct_answer);
     setExplanation(question.explanation || '');
+    setQuestionYear(question.model_year || 2024);
     setIsDialogOpen(true);
   };
 
@@ -165,7 +172,8 @@ const AdminQuestions: React.FC<Props> = ({ userRole }) => {
       options: filledOptions,
       correct_answer: correctAnswer,
       explanation: explanation.trim() || null,
-      subject_id: selectedSubject
+      subject_id: selectedSubject,
+      model_year: questionYear
     };
 
     if (editingQuestion) {
@@ -234,9 +242,11 @@ const AdminQuestions: React.FC<Props> = ({ userRole }) => {
     fetchQuestions(selectedSubject);
   };
 
-  const filteredQuestions = questions.filter(q =>
-    q.question_text.includes(searchQuery)
-  );
+  const filteredQuestions = questions.filter(q => {
+    const matchesSearch = q.question_text.includes(searchQuery);
+    const matchesYear = !selectedYear || q.model_year === parseInt(selectedYear);
+    return matchesSearch && matchesYear;
+  });
 
   return (
     <Card>
@@ -300,6 +310,22 @@ const AdminQuestions: React.FC<Props> = ({ userRole }) => {
                   </div>
 
                   <div className="space-y-2">
+                    <Label>نموذج الاختبار (السنة)</Label>
+                    <Select value={questionYear.toString()} onValueChange={(v) => setQuestionYear(parseInt(v))}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="اختر السنة" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {MODEL_YEARS.map((year) => (
+                          <SelectItem key={year} value={year.toString()}>
+                            {year}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div className="space-y-2">
                     <Label>الملاحظة الإرشادية (اختياري)</Label>
                     <Textarea
                       value={explanation}
@@ -319,7 +345,7 @@ const AdminQuestions: React.FC<Props> = ({ userRole }) => {
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <Select value={selectedLevel} onValueChange={setSelectedLevel}>
             <SelectTrigger>
               <SelectValue placeholder="اختر المستوى" />
@@ -345,6 +371,23 @@ const AdminQuestions: React.FC<Props> = ({ userRole }) => {
               {subjects.map((subject) => (
                 <SelectItem key={subject.id} value={subject.id}>
                   {subject.name_ar}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+
+          <Select 
+            value={selectedYear} 
+            onValueChange={setSelectedYear}
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="نموذج الاختبار" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="">جميع السنوات</SelectItem>
+              {MODEL_YEARS.map((year) => (
+                <SelectItem key={year} value={year.toString()}>
+                  {year}
                 </SelectItem>
               ))}
             </SelectContent>
