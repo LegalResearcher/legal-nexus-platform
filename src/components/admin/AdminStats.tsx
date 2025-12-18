@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { BarChart3, Users, Eye, BookOpen } from 'lucide-react';
+import { BarChart3, Users, Eye, BookOpen, Download } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import {
   Table,
@@ -20,6 +20,7 @@ interface SubjectStats {
 const AdminStats: React.FC = () => {
   const [totalVisits, setTotalVisits] = useState(0);
   const [totalAttempts, setTotalAttempts] = useState(0);
+  const [totalDownloads, setTotalDownloads] = useState(0);
   const [subjectStats, setSubjectStats] = useState<SubjectStats[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -44,6 +45,19 @@ const AdminStats: React.FC = () => {
         .select('*', { count: 'exact', head: true });
       
       setTotalAttempts(attemptsCount || 0);
+
+      // Fetch total downloads from all content tables
+      const [lawsData, booksData, templatesData] = await Promise.all([
+        supabase.from('legal_laws').select('total_downloads'),
+        supabase.from('legal_books').select('total_downloads'),
+        supabase.from('legal_templates').select('total_downloads'),
+      ]);
+
+      const lawsDownloads = (lawsData.data || []).reduce((sum, item) => sum + (item.total_downloads || 0), 0);
+      const booksDownloads = (booksData.data || []).reduce((sum, item) => sum + (item.total_downloads || 0), 0);
+      const templatesDownloads = (templatesData.data || []).reduce((sum, item) => sum + (item.total_downloads || 0), 0);
+      
+      setTotalDownloads(lawsDownloads + booksDownloads + templatesDownloads);
 
       // Fetch attempts per subject
       const { data: subjects } = await supabase
@@ -84,7 +98,7 @@ const AdminStats: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <Card className="bg-gradient-to-br from-blue-500 to-blue-600 text-white">
           <CardHeader className="pb-2">
             <CardTitle className="flex items-center gap-2 text-lg">
@@ -118,6 +132,18 @@ const AdminStats: React.FC = () => {
           </CardHeader>
           <CardContent>
             <p className="text-4xl font-bold">{subjectStats.length.toLocaleString('ar-EG')}</p>
+          </CardContent>
+        </Card>
+
+        <Card className="bg-gradient-to-br from-orange-500 to-orange-600 text-white">
+          <CardHeader className="pb-2">
+            <CardTitle className="flex items-center gap-2 text-lg">
+              <Download className="h-5 w-5" />
+              إجمالي التحميلات الفعلية
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-4xl font-bold">{totalDownloads.toLocaleString('ar-EG')}</p>
           </CardContent>
         </Card>
       </div>

@@ -14,6 +14,33 @@ export type Database = {
   }
   public: {
     Tables: {
+      content_categories: {
+        Row: {
+          created_at: string
+          id: string
+          name_ar: string
+          name_en: string | null
+          type: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          name_ar: string
+          name_en?: string | null
+          type: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          name_ar?: string
+          name_en?: string | null
+          type?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       exam_attempts: {
         Row: {
           answers: Json
@@ -202,6 +229,180 @@ export type Database = {
           },
         ]
       }
+      legal_books: {
+        Row: {
+          allow_download: boolean
+          author: string | null
+          category_id: string | null
+          created_at: string
+          description: string | null
+          file_type: string | null
+          file_url: string | null
+          id: string
+          is_visible: boolean
+          source_type: string
+          title: string
+          total_downloads: number
+          total_views: number
+          updated_at: string
+        }
+        Insert: {
+          allow_download?: boolean
+          author?: string | null
+          category_id?: string | null
+          created_at?: string
+          description?: string | null
+          file_type?: string | null
+          file_url?: string | null
+          id?: string
+          is_visible?: boolean
+          source_type?: string
+          title: string
+          total_downloads?: number
+          total_views?: number
+          updated_at?: string
+        }
+        Update: {
+          allow_download?: boolean
+          author?: string | null
+          category_id?: string | null
+          created_at?: string
+          description?: string | null
+          file_type?: string | null
+          file_url?: string | null
+          id?: string
+          is_visible?: boolean
+          source_type?: string
+          title?: string
+          total_downloads?: number
+          total_views?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "legal_books_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "content_categories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      legal_laws: {
+        Row: {
+          allow_download: boolean
+          category_id: string | null
+          created_at: string
+          description: string | null
+          file_type: string | null
+          file_url: string | null
+          id: string
+          is_visible: boolean
+          source_type: string
+          title: string
+          total_downloads: number
+          total_views: number
+          updated_at: string
+        }
+        Insert: {
+          allow_download?: boolean
+          category_id?: string | null
+          created_at?: string
+          description?: string | null
+          file_type?: string | null
+          file_url?: string | null
+          id?: string
+          is_visible?: boolean
+          source_type?: string
+          title: string
+          total_downloads?: number
+          total_views?: number
+          updated_at?: string
+        }
+        Update: {
+          allow_download?: boolean
+          category_id?: string | null
+          created_at?: string
+          description?: string | null
+          file_type?: string | null
+          file_url?: string | null
+          id?: string
+          is_visible?: boolean
+          source_type?: string
+          title?: string
+          total_downloads?: number
+          total_views?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "legal_laws_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "content_categories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      legal_templates: {
+        Row: {
+          allow_download: boolean
+          category_id: string | null
+          created_at: string
+          description: string | null
+          file_type: string | null
+          file_url: string | null
+          id: string
+          image_urls: Json
+          is_visible: boolean
+          source_type: string
+          title: string
+          total_downloads: number
+          total_views: number
+          updated_at: string
+        }
+        Insert: {
+          allow_download?: boolean
+          category_id?: string | null
+          created_at?: string
+          description?: string | null
+          file_type?: string | null
+          file_url?: string | null
+          id?: string
+          image_urls?: Json
+          is_visible?: boolean
+          source_type?: string
+          title: string
+          total_downloads?: number
+          total_views?: number
+          updated_at?: string
+        }
+        Update: {
+          allow_download?: boolean
+          category_id?: string | null
+          created_at?: string
+          description?: string | null
+          file_type?: string | null
+          file_url?: string | null
+          id?: string
+          image_urls?: Json
+          is_visible?: boolean
+          source_type?: string
+          title?: string
+          total_downloads?: number
+          total_views?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "legal_templates_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "content_categories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       page_visits: {
         Row: {
           created_at: string
@@ -282,6 +483,57 @@ export type Database = {
         }
         Relationships: []
       }
+      site_analytics: {
+        Row: {
+          created_at: string
+          event_type: string
+          id: string
+          page_path: string | null
+          resource_id: string | null
+          resource_type: string | null
+        }
+        Insert: {
+          created_at?: string
+          event_type: string
+          id?: string
+          page_path?: string | null
+          resource_id?: string | null
+          resource_type?: string | null
+        }
+        Update: {
+          created_at?: string
+          event_type?: string
+          id?: string
+          page_path?: string | null
+          resource_id?: string | null
+          resource_type?: string | null
+        }
+        Relationships: []
+      }
+      site_settings: {
+        Row: {
+          created_at: string
+          id: string
+          setting_key: string
+          setting_value: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          setting_key: string
+          setting_value?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          setting_key?: string
+          setting_value?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string
@@ -314,6 +566,14 @@ export type Database = {
           _user_id: string
         }
         Returns: boolean
+      }
+      increment_download_count: {
+        Args: { record_id: string; table_name: string }
+        Returns: undefined
+      }
+      increment_view_count: {
+        Args: { record_id: string; table_name: string }
+        Returns: undefined
       }
       increment_visit_count: { Args: { page_key: string }; Returns: undefined }
     }
