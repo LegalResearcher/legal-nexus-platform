@@ -244,7 +244,7 @@ const AdminQuestions: React.FC<Props> = ({ userRole }) => {
 
   const filteredQuestions = questions.filter(q => {
     const matchesSearch = q.question_text.includes(searchQuery);
-    const matchesYear = !selectedYear || q.model_year === parseInt(selectedYear);
+    const matchesYear = selectedYear === 'all' || !selectedYear || q.model_year === parseInt(selectedYear);
     return matchesSearch && matchesYear;
   });
 
@@ -384,7 +384,7 @@ const AdminQuestions: React.FC<Props> = ({ userRole }) => {
               <SelectValue placeholder="نموذج الاختبار" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">جميع السنوات</SelectItem>
+              <SelectItem value="all">جميع السنوات</SelectItem>
               {MODEL_YEARS.map((year) => (
                 <SelectItem key={year} value={year.toString()}>
                   {year}
