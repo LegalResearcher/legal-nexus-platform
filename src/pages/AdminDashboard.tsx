@@ -3,11 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { User, Session } from '@supabase/supabase-js';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { 
   Shield, LogOut, Users, BookOpen, Settings, 
-  BarChart3, Trash2, Home, Plus
+  BarChart3, Trash2, Home, Scale, FileText, FolderOpen
 } from 'lucide-react';
 import { toast } from 'sonner';
 import AdminStats from '@/components/admin/AdminStats';
@@ -15,6 +14,11 @@ import AdminQuestions from '@/components/admin/AdminQuestions';
 import AdminUsers from '@/components/admin/AdminUsers';
 import AdminSettings from '@/components/admin/AdminSettings';
 import AdminPendingDeletions from '@/components/admin/AdminPendingDeletions';
+import AdminLaws from '@/components/admin/AdminLaws';
+import AdminBooks from '@/components/admin/AdminBooks';
+import AdminTemplates from '@/components/admin/AdminTemplates';
+import AdminCategories from '@/components/admin/AdminCategories';
+import AdminSiteSettings from '@/components/admin/AdminSiteSettings';
 
 type AppRole = 'admin' | 'editor';
 
@@ -135,27 +139,43 @@ const AdminDashboard: React.FC = () => {
 
       <div className="container px-4 py-6">
         <Tabs defaultValue="stats" className="w-full">
-          <TabsList className="grid w-full grid-cols-5 mb-6">
-            <TabsTrigger value="stats" className="gap-1 text-xs sm:text-sm">
+          <TabsList className="flex flex-wrap gap-1 h-auto p-1 mb-6">
+            <TabsTrigger value="stats" className="gap-1 text-xs">
               <BarChart3 className="h-4 w-4" />
               <span className="hidden sm:inline">الإحصائيات</span>
             </TabsTrigger>
-            <TabsTrigger value="questions" className="gap-1 text-xs sm:text-sm">
+            <TabsTrigger value="questions" className="gap-1 text-xs">
               <BookOpen className="h-4 w-4" />
               <span className="hidden sm:inline">الأسئلة</span>
             </TabsTrigger>
+            <TabsTrigger value="laws" className="gap-1 text-xs">
+              <Scale className="h-4 w-4" />
+              <span className="hidden sm:inline">القوانين</span>
+            </TabsTrigger>
+            <TabsTrigger value="books" className="gap-1 text-xs">
+              <BookOpen className="h-4 w-4" />
+              <span className="hidden sm:inline">الكتب</span>
+            </TabsTrigger>
+            <TabsTrigger value="templates" className="gap-1 text-xs">
+              <FileText className="h-4 w-4" />
+              <span className="hidden sm:inline">النماذج</span>
+            </TabsTrigger>
+            <TabsTrigger value="categories" className="gap-1 text-xs">
+              <FolderOpen className="h-4 w-4" />
+              <span className="hidden sm:inline">التصنيفات</span>
+            </TabsTrigger>
             {isAdmin && (
-              <TabsTrigger value="users" className="gap-1 text-xs sm:text-sm">
+              <TabsTrigger value="users" className="gap-1 text-xs">
                 <Users className="h-4 w-4" />
                 <span className="hidden sm:inline">المستخدمين</span>
               </TabsTrigger>
             )}
-            <TabsTrigger value="settings" className="gap-1 text-xs sm:text-sm">
+            <TabsTrigger value="settings" className="gap-1 text-xs">
               <Settings className="h-4 w-4" />
               <span className="hidden sm:inline">الإعدادات</span>
             </TabsTrigger>
             {isAdmin && (
-              <TabsTrigger value="pending" className="gap-1 text-xs sm:text-sm">
+              <TabsTrigger value="pending" className="gap-1 text-xs">
                 <Trash2 className="h-4 w-4" />
                 <span className="hidden sm:inline">طلبات الحذف</span>
               </TabsTrigger>
@@ -170,6 +190,22 @@ const AdminDashboard: React.FC = () => {
             <AdminQuestions userRole={userRole} />
           </TabsContent>
 
+          <TabsContent value="laws">
+            <AdminLaws userRole={userRole} />
+          </TabsContent>
+
+          <TabsContent value="books">
+            <AdminBooks userRole={userRole} />
+          </TabsContent>
+
+          <TabsContent value="templates">
+            <AdminTemplates userRole={userRole} />
+          </TabsContent>
+
+          <TabsContent value="categories">
+            <AdminCategories userRole={userRole} />
+          </TabsContent>
+
           {isAdmin && (
             <TabsContent value="users">
               <AdminUsers />
@@ -177,7 +213,10 @@ const AdminDashboard: React.FC = () => {
           )}
 
           <TabsContent value="settings">
-            <AdminSettings userRole={userRole} />
+            <div className="space-y-6">
+              <AdminSettings userRole={userRole} />
+              <AdminSiteSettings userRole={userRole} />
+            </div>
           </TabsContent>
 
           {isAdmin && (
