@@ -22,6 +22,7 @@ interface ExamState {
   duration: number;
   questionsCount: number;
   passingScore: number;
+  modelYear: number;
 }
 
 interface Answer {
@@ -72,7 +73,8 @@ const ExamTaking: React.FC = () => {
     const { data, error } = await supabase
       .from('exam_questions')
       .select('*')
-      .eq('subject_id', subjectId);
+      .eq('subject_id', subjectId)
+      .eq('model_year', examState.modelYear);
     
     if (error || !data) {
       toast.error('حدث خطأ في تحميل الأسئلة');

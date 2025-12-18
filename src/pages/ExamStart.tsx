@@ -6,8 +6,17 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Slider } from '@/components/ui/slider';
-import { ArrowRight, Clock, BookOpen, User, Lock, Play } from 'lucide-react';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { ArrowRight, Clock, BookOpen, User, Lock, Play, Calendar } from 'lucide-react';
 import { toast } from 'sonner';
+
+const MODEL_YEARS = [2020, 2021, 2022, 2023, 2024, 2025, 2026];
 
 interface Subject {
   id: string;
@@ -45,12 +54,19 @@ const ExamStart: React.FC = () => {
   const [password, setPassword] = useState('');
   const [customDuration, setCustomDuration] = useState(30);
   const [showPasswordInput, setShowPasswordInput] = useState(false);
+  const [selectedYear, setSelectedYear] = useState<string>('');
 
   useEffect(() => {
     if (subjectId) {
       fetchSubjectDetails();
     }
   }, [subjectId]);
+
+  useEffect(() => {
+    if (subjectId && selectedYear) {
+      fetchQuestionsCountByYear();
+    }
+  }, [subjectId, selectedYear]);
 
   const fetchSubjectDetails = async () => {
     setIsLoading(true);
@@ -101,19 +117,27 @@ const ExamStart: React.FC = () => {
       setCustomDuration(30);
     }
 
-    // Fetch questions count
+    setIsLoading(false);
+  };
+
+  const fetchQuestionsCountByYear = async () => {
     const { count } = await supabase
       .from('exam_questions')
       .select('*', { count: 'exact', head: true })
-      .eq('subject_id', subjectId);
+      .eq('subject_id', subjectId)
+      .eq('model_year', parseInt(selectedYear));
     
     setQuestionsCount(count || 0);
-    setIsLoading(false);
   };
 
   const handleStartExam = () => {
     if (!studentName.trim()) {
       toast.error('الرجاء إدخال اسمك');
+      return;
+    }
+
+    if (!selectedYear) {
+      toast.error('الرجاء اختيار نموذج سنة الاختبار');
       return;
     }
 
@@ -138,7 +162,8 @@ const ExamStart: React.FC = () => {
         studentName: studentName.trim(),
         duration: customDuration,
         questionsCount: actualQuestionsCount,
-        passingScore: settings?.passing_score || 60
+        passingScore: settings?.passing_score || 60,
+        modelYear: parseInt(selectedYear)
       }
     });
   };
@@ -197,9 +222,32 @@ const ExamStart: React.FC = () => {
               <span className="text-muted-foreground">المادة</span>
               <span className="font-semibold">{subject?.name_ar}</span>
             </div>
+            
+            {/* Year Selection */}
+            <div className="py-2 border-b border-border space-y-2">
+              <Label className="flex items-center gap-2 text-muted-foreground">
+                <Calendar className="h-4 w-4" />
+                نموذج سنة الاختبار
+              </Label>
+              <Select value={selectedYear} onValueChange={setSelectedYear}>
+                <SelectTrigger className="text-right">
+                  <SelectValue placeholder="اختر سنة النموذج" />
+                </SelectTrigger>
+                <SelectContent>
+                  {MODEL_YEARS.map((year) => (
+                    <SelectItem key={year} value={year.toString()}>
+                      {year}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
             <div className="flex justify-between items-center py-2 border-b border-border">
               <span className="text-muted-foreground">عدد الأسئلة</span>
-              <span className="font-semibold">{actualQuestionsCount} سؤال</span>
+              <span className="font-semibold">
+                {selectedYear ? `${actualQuestionsCount} سؤال` : 'اختر السنة أولاً'}
+              </span>
             </div>
             <div className="flex justify-between items-center py-2 border-b border-border">
               <span className="text-muted-foreground">درجة النجاح</span>
@@ -286,15 +334,15 @@ const ExamStart: React.FC = () => {
         <Button 
           onClick={handleStartExam}
           className="w-full h-14 text-lg gap-3"
-          disabled={!studentName.trim() || actualQuestionsCount === 0}
+          disabled={!studentName.trim() || !selectedYear || actualQuestionsCount === 0}
         >
           <Play className="h-6 w-6" />
           ابدأ الاختبار
         </Button>
 
-        {actualQuestionsCount === 0 && (
+        {selectedYear && actualQuestionsCount === 0 && (
           <p className="text-center text-destructive text-sm">
-            ⚠️ لا توجد أسئلة متاحة لهذا الاختبار حالياً
+            ⚠️ لا توجد أسئلة متاحة لهذا النموذج
           </p>
         )}
       </div>
