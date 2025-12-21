@@ -1,73 +1,49 @@
-# Welcome to your vercel project
+﻿# منصة الناصر القانونية ⚖️ | Al-Nasser Legal Nexus
 
-## Project info
+بوابتك الشاملة للقوانين والتشريعات اليمنية والعربية والكتب القانونية. تهدف المنصة إلى أرشفة وتسهيل الوصول للمعلومة القانونية للباحثين والمحامين والقضاة، معتمدة على أحدث تقنيات الويب وتصميم عصري يعتمد خط (Cairo) لسهولة القراءة.
 
-**URL**: https://legal-nexus-platform.vercel.app/
+**رابط المنصة:** [https://legal-nexus-platform.vercel.app](https://legal-nexus-platform.vercel.app)
 
-## How can I edit this code?
+---
 
-There are several ways of editing your application.
+## 📚 عن المنصة
 
-**Use vercel**
+منصة قانونية رقمية متخصصة توفر:
+* أرشيفاً للقوانين والتشريعات اليمنية والعربية.
+* مكتبة رقمية للكتب والمراجع القانونية.
+* واجهة بحث متطورة وسريعة للوصول للمعلومة.
+* تصميم مريح للعين ومناسب للقراءة الطويلة.
 
-Simply visit the [vercel Project](https://legal-nexus-platform.vercel.app/) and start prompting.
+---
 
-Changes made via vercel will be committed automatically to this repo.
+## 🛠 التقنيات المستخدمة (Technologies)
 
-**Use your preferred IDE**
+تم بناء المنصة باستخدام مكدس تقني حديث لضمان السرعة والموثوقية في عرض البيانات الضخمة:
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in fercel.
+- **Vite**: لضمان أداء عالي وسرعة في تحميل الصفحات.
+- **TypeScript**: لكتابة كود برمجي آمن وقوي البنية.
+- **React**: لبناء واجهات مستخدم تفاعلية وسلسة.
+- **shadcn-ui**: مكتبة مكونات تصميم احترافية.
+- **Tailwind CSS**: لتنسيق الصفحات بشكل متجاوب وأنيق.
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+---
 
-Follow these steps:
+## 💻 دليل المطورين (Setup Guide)
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+لتشغيل المشروع محلياً للمساهمة في التطوير، اتبع الخطوات التالية:
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+**المتطلبات:** تأكد من تثبيت [Node.js](https://nodejs.org/) و [Git](https://git-scm.com/) على جهازك.
 
-# Step 3: Install the necessary dependencies.
+```bash
+# 1. استنساخ المستودع (Clone)
+git clone [https://github.com/LegalResearcher/legal-nexus-platform.git](https://github.com/LegalResearcher/legal-nexus-platform.git)
+
+# 2. الدخول إلى مجلد المشروع
+cd legal-nexus-platform
+
+# 3. تثبيت الحزم والمكاتب
 npm i
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# 4. تشغيل السيرفر المحلي (للمعاينة)
 npm run dev
-```
 
-**Edit a file directly in GitHub**
-
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [vercel](https://legal-nexus-platform.vercel.app/) and click on Share -> Publish.
-
-## Can I connect a custom domain to my vercel project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.vercel.dev/features/custom-domain#custom-domain)
